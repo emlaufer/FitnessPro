@@ -15,6 +15,12 @@ import com.example.fitnesspro.database.FitnessDatabase
 import com.example.fitnesspro.databinding.FragmentAddWeightBinding
 import com.google.android.material.datepicker.MaterialDatePicker
 import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
@@ -30,7 +36,7 @@ class AddWeightFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         // TODO: refactor according to https://developer.android.com/topic/libraries/architecture/viewmodel
         _binding = FragmentAddWeightBinding.inflate(inflater, container, false)
@@ -48,10 +54,10 @@ class AddWeightFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
 
         // setup observers
-        viewModel.navigateToFirstFragment.observe(viewLifecycleOwner, Observer {
+        viewModel.navigateToFirstFragment.observe(viewLifecycleOwner, {
             findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
         })
-        viewModel.showDateClicker.observe(viewLifecycleOwner, Observer {
+        viewModel.showDateClicker.observe(viewLifecycleOwner, {
             showDateClicker()
         })
 
@@ -73,9 +79,13 @@ class AddWeightFragment : Fragment() {
         // todo: is there a way to cache this? not sure
         val picker = MaterialDatePicker.Builder.datePicker()
             .setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build()
+
         activity?.let {
-            picker.addOnPositiveButtonClickListener { timestamp ->
-                binding.addWeightViewModel!!.onDateChosen(timestamp)
+            picker.addOnPositiveButtonClickListener { millis ->
+                // NOTE: this function gives the millis of the date chosen
+                //       we don't want to convert these millis by timezone because it corresponds to
+                //       the LOCAL date we want.
+                binding.addWeightViewModel!!.onDateChosen(Instant.ofEpochMilli(millis).atZone(ZoneId.of("UTC")))
             }
 
             picker.show(it.supportFragmentManager, picker.toString())

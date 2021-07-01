@@ -12,7 +12,8 @@ class GraphWeightViewModel(weightTable: WeightDao): ViewModel() {
     val weights = weightTable.getAllWeights()
     val weightsEntries = Transformations.map(weights) { weights ->
         // TODO: make use double instead?
-        weights.map { weight -> Entry(weight.timestamp.toFloat(), weight.weight.toFloat()) }
+        // todo: kinda gross
+        weights.map { weight -> Entry(weight.timestamp?.toEpochMilli()?.toFloat() ?: 0.0f, weight.weight.toFloat()) }
     }
     val weeklyEntries = Transformations.map(weightsEntries) { entries ->
         resample(entries, Calendar.WEEK_OF_YEAR)

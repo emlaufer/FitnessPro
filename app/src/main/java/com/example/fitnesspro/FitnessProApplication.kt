@@ -5,20 +5,13 @@ import android.app.Application
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.os.Build
-import android.text.format.*
-import androidx.annotation.RequiresApi
-import androidx.work.*
-import com.example.fitnesspro.work.NotifyWeightWorker
 import com.example.fitnesspro.work.WeightAlarmReceiver
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.text.DateFormat
-import java.time.format.DateTimeFormatter
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 class FitnessProApplication: Application() {
     private val applicationScope = CoroutineScope(Dispatchers.Default)

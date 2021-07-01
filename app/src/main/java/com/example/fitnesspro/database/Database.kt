@@ -22,13 +22,14 @@ interface WeightDao {
     @Query("SELECT * FROM weight_table ORDER BY id DESC LIMIT 1")
     suspend fun getLastEntry(): WeightEntity?
 
-    @Query("SELECT * FROM weight_table ORDER BY time_millis")
+    @Query("SELECT * FROM weight_table ORDER BY utc_millis")
     fun getAllWeights(): LiveData<List<WeightEntity>>
 
     // todo: remove, clear....
 }
 
 @Database(entities = [WeightEntity::class], version = 1, exportSchema = false)
+@TypeConverters(Converters::class)
 abstract class FitnessDatabase: RoomDatabase() {
     abstract val weightDao: WeightDao
 
@@ -51,7 +52,7 @@ abstract class FitnessDatabase: RoomDatabase() {
                     INSTANCE = instance
                 }
 
-                return instance;
+                return instance
             }
         }
     }

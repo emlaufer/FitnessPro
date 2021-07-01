@@ -37,7 +37,9 @@
                 android:ems="10"
                 android:hint="@string/weight_lbs"
                 android:inputType="numberDecimal"
-                tools:text="145.0" />
+                android:text="@={addWeightViewModel.weightString}"
+                tools:text="145.0"
+                android:importantForAutofill="no" />
 
             <TextView
                 android:id="@+id/date_view"
@@ -65,7 +67,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout"
             app:layout_constraintVertical_bias="1.0"
-            android:onClick="@{() -> addWeightViewModel.onAddWeightData(weightEdit.getText().toString(), dateView.getText().toString())}"
+            android:onClick="@{() -> addWeightViewModel.onAddWeightData()}"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
